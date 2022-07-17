@@ -221,7 +221,7 @@ public class DrawingPanel extends JPanel {
 	}
 
 	public void reset() {
-		this.setBackground(Color.BLUE); // for the game, but can be changed to a different color.
+		this.setBackground(new Color(255,255,255)); // for the game, but can be changed to a different color.
 
 		// Instiate our Sprites with the abstract method from sprite class
 		try {
