@@ -16,12 +16,7 @@ import javax.swing.Timer;
 
 public class DrawingPanel extends JPanel {
 	public static enum GameState {
-		NOT_STARTED,
-		STARTED,
-		UNPAUSED,
-		PAUSED,
-		WON,
-		LOST
+		NOT_STARTED, STARTED, UNPAUSED, PAUSED, WON, LOST
 	};
 
 	public Holder<GameState> state = new Holder<GameState>(null);
@@ -32,50 +27,48 @@ public class DrawingPanel extends JPanel {
 	private Timer timer;
 	private int x;
 
-	
-
 	/*
-	 * The clownfish is the player. The sea anemone is the objective and the
-	 * sea mines are the enemies. I don't know if you had a specific theme in mind
-	 * or if you already found.
+	 * The clownfish is the player. The sea anemone is the objective and the sea
+	 * mines are the enemies. I don't know if you had a specific theme in mind or if
+	 * you already found.
 	 */
-	
+
 	public DrawingPanel() {
 		super();
 
 		state.setCallback(newState -> {
 			switch (newState) {
-				case NOT_STARTED:
-					// the game just started up
-					this.reset();
-					break;
-				case STARTED:
-					// the game is starting!
-					this.reset();
-					this.startGame();
-					this.timer.start();
-					break;
-				case UNPAUSED:
-					// unpaused
-					// different from started
-					this.timer.start();
-					break;
-				case PAUSED:
-					// the game is being paused
-					this.timer.stop();
-					break;
-				case WON:
-					// they won just now
-					this.timer.stop();
-					this.controlPanel.resetStartButton();
-					repaint();
-					break;
-				case LOST:
-					// they lost just now
-					this.timer.stop();
-					this.controlPanel.resetStartButton();
-					repaint();
-					break;
+			case NOT_STARTED:
+				// the game just started up
+				this.reset();
+				break;
+			case STARTED:
+				// the game is starting!
+				this.reset();
+				this.startGame();
+				this.timer.start();
+				break;
+			case UNPAUSED:
+				// unpaused
+				// different from started
+				this.timer.start();
+				break;
+			case PAUSED:
+				// the game is being paused
+				this.timer.stop();
+				break;
+			case WON:
+				// they won just now
+				this.timer.stop();
+				this.controlPanel.resetStartButton();
+				repaint();
+				break;
+			case LOST:
+				// they lost just now
+				this.timer.stop();
+				this.controlPanel.resetStartButton();
+				repaint();
+				break;
 			}
 		});
 
@@ -87,14 +80,14 @@ public class DrawingPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				player.tick();
-				
+
 				for (int i = 0; i < enemies.size(); i++) {
 
 					Sprite enemy = enemies.get(i);
-					
+
 					enemy.setLocation(enemy.getX(), enemy.getY() + 7);
 					// we don't want the player to leave the screen..
-					if (DrawingPanel.this.getHeight() == player.getY()+ player.getHeight()) {
+					if (DrawingPanel.this.getHeight() == player.getY() + player.getHeight()) {
 						player.setY(650);
 					} else if (player.getY() == 0) {
 						player.setY(10);
@@ -104,10 +97,10 @@ public class DrawingPanel extends JPanel {
 						player.setX(10);
 					}
 
-					if (enemy.getY()  > DrawingPanel.this.getHeight()) {
+					if (enemy.getY() > DrawingPanel.this.getHeight()) {
 						enemies.remove(i);
 					}
-					
+
 					// check if enemy intersects with player or player intersects with the objective
 					if (enemy.intersect(player)) {
 						state.setData(GameState.LOST);
@@ -125,7 +118,8 @@ public class DrawingPanel extends JPanel {
 								enemy = new Sprite("./images/mine.png") {
 
 									@Override
-									public void tick() {}
+									public void tick() {
+									}
 
 								};
 								enemy.setWidth(enemy.getWidth() / 8);
@@ -142,11 +136,10 @@ public class DrawingPanel extends JPanel {
 						enemies.get(i).setX(x);
 
 					}
-				
 
-				repaint();
-					}
+					repaint();
 				}
+			}
 		});
 
 		// Key configs for our game
@@ -221,7 +214,7 @@ public class DrawingPanel extends JPanel {
 	}
 
 	public void reset() {
-		this.setBackground(new Color(255,255,255)); // for the game, but can be changed to a different color.
+		this.setBackground(new Color(255, 255, 255)); // for the game, but can be changed to a different color.
 
 		// Instiate our Sprites with the abstract method from sprite class
 		try {
@@ -273,7 +266,8 @@ public class DrawingPanel extends JPanel {
 				enemy = new Sprite("./images/mine.png") {
 
 					@Override
-					public void tick() {}
+					public void tick() {
+					}
 
 				};
 
@@ -288,7 +282,7 @@ public class DrawingPanel extends JPanel {
 			}
 
 		}
-		
+
 	}
 
 	// Stops the timer in the drawing panel constructor
@@ -305,28 +299,31 @@ public class DrawingPanel extends JPanel {
 		super.paintComponent(g);
 		Graphics2D brush = (Graphics2D) g;
 		// paint components
-		if (player != null) player.paint(brush);
-		if (objective != null) objective.paint(brush);
-		if (enemy != null) enemy.paint(brush);
+		if (player != null)
+			player.paint(brush);
+		if (objective != null)
+			objective.paint(brush);
+		if (enemy != null)
+			enemy.paint(brush);
 		// will paint the enemies for the game
 		for (int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).paint(brush);
 		}
 
 		switch (state.getData()) {
-			case WON:
-				brush.setFont(new Font(" Serif", Font.BOLD, 70));
-				brush.setColor(Color.BLACK);
-				brush.drawString("YOU WIN", 325, 400);
-				break;
-			case LOST:
-				brush.setFont(new Font(" Serif", Font.BOLD, 70));
-				brush.setColor(Color.BLACK);
-				brush.drawString("TRY AGAIN", 325, 400);
-				break;
-			default:
-				// nothing special
-				break;
+		case WON:
+			brush.setFont(new Font(" Serif", Font.BOLD, 70));
+			brush.setColor(Color.BLACK);
+			brush.drawString("YOU WIN", 325, 400);
+			break;
+		case LOST:
+			brush.setFont(new Font(" Serif", Font.BOLD, 70));
+			brush.setColor(Color.BLACK);
+			brush.drawString("TRY AGAIN", 325, 400);
+			break;
+		default:
+			// nothing special
+			break;
 		}
 	}
 
